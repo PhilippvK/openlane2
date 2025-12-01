@@ -30,3 +30,4 @@ from .config import (
     UnknownExtensionError,
 )
 from .flow import flow_common_variables as universal_flow_config_variables
+from .flow import flow_common_variables2 as universal_flow_config_variables2

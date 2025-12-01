@@ -486,5 +486,29 @@ option_variables = [
         default=Path(os.path.join(get_script_dir(), "base.sdc")),
     ),
 ]
+option_variables2 = [
+    # Common
+    Variable(
+        "DESIGN_DIR",
+        Path,
+        "The directory of the design. Should be set via command-line arguments or :meth:`Config.load` flags and not actual configuration files. If using a configuration file, ``DESIGN_DIR`` will be the directory where that file exists.",
+    ),
+    # Variable(
+    #     "DESIGN_NAME",
+    #     str,
+    #     "The name of the top level module of the design. Must be a valid C identifier, i.e., matches the regular expression `[_a-zA-Z][_a-zA-Z0-9]+`.",
+    # ),
+    Variable(
+        "BENCH",
+        str,
+        "Name of the Benchmark/Workload",
+    ),
+    Variable(
+        "MACROS",
+        Optional[Dict[str, Macro]],
+        "A dictionary of Macro definition objects. See {py:class}`openlane.config.Macro` for more info.",
+    ),
+]
 
 flow_common_variables = pdk_variables + scl_variables + option_variables
+flow_common_variables2 = option_variables2

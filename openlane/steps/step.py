@@ -52,7 +52,9 @@ from ..config import (
     Config,
     Variable,
     universal_flow_config_variables,
+    universal_flow_config_variables2,
 )
+from ..config.config import GenIEConfig
 from ..state import DesignFormat, DesignFormatObject, State, InvalidState, StateElement
 from ..common import (
     GenericDict,
@@ -498,7 +500,8 @@ class Step(ABC):
             self.id = id
 
         if config is None:
-            if current_interactive := Config.current_interactive:
+            # if current_interactive := Config.current_interactive:
+            if current_interactive := GenIEConfig.current_interactive:
                 config = current_interactive
             else:
                 raise TypeError("Missing required argument 'config'")
@@ -1545,3 +1548,21 @@ class CompositeStep(Step):
                 metrics_updates[key] = state.metrics[key]
 
         return views_updates, metrics_updates
+
+class GenIEStep(Step):
+
+    @classmethod
+    def get_all_config_variables(Self) -> List[Variable]:
+        variables_by_name: Dict[str, Variable] = {
+            variable.name: variable for variable in universal_flow_config_variables2
+        }
+        for variable in Self.config_vars:
+            if existing_variable := variables_by_name.get(variable.name):
+                if variable != existing_variable:
+                    raise StepException(
+                        f"Misconstructed step: Unrelated variable exists with the same name as one in the common Flow variables: {variable.name}"
+                    )
+            else:
+                variables_by_name[variable.name] = variable
+
+        return list(variables_by_name.values())

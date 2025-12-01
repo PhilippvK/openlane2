@@ -462,3 +462,43 @@ def preprocess_dict(
         preprocessed = extract_process_vars(preprocessed)
 
     return preprocessed
+
+
+def preprocess_dict2(
+    config_dict: Mapping[str, Any],
+    design_dir: str,
+    only_extract_process_info: bool = False,
+    # pdk: Optional[str] = None,
+    # pdkpath: Optional[str] = None,
+    # scl: Optional[str] = None,
+    readable_paths: Optional[List[str]] = None,
+) -> Dict[str, Any]:
+    """
+    If readable_paths are set to None, refg:: will not work
+    """
+    # if None in (pdk, pdkpath, scl):
+    #     if only_extract_process_info:
+    #         pdkpath = ""
+    #         scl = ""
+    #         pdk = ""
+    #     else:
+    #         raise TypeError(
+    #             "pdk, pdkpath and scl all need to be non-None unless only_extract_process_info is passed"
+    #         )
+
+    base_vars = {
+        # Keys.pdk: pdk,
+        # Keys.pdkpath: pdkpath,
+        # Keys.scl: scl,
+        Keys.design_dir: design_dir,
+    }
+
+    preprocessed = process_config_dict(
+        config_dict,
+        base_vars,
+        readable_paths,
+    )
+    if only_extract_process_info:
+        preprocessed = extract_process_vars(preprocessed)
+
+    return preprocessed
